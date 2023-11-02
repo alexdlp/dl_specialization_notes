@@ -10,6 +10,9 @@ book:
   date: "6/10/2023"
   chapters:
     - index.qmd
+    - part: Deep Learning Specialization
+      chapters: 
+        - Convolutional_Neural_Networks.ipynb
     - intro.qmd
     - sine_wave.qmd
     - summary.qmd
@@ -20,6 +23,7 @@ bibliography: references.bib
 format:
   html:
     theme: cosmo
+    css: styles.css
   pdf:
     documentclass: scrreprt
 
