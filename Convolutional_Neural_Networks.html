@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#ejercicio-1---zero_pad" id="toc-ejercicio-1---zero_pad" class="nav-link" data-scroll-target="#ejercicio-1---zero_pad"><span class="header-section-number">2.1.1</span> Ejercicio 1 - zero_pad</a></li>
   </ul></li>
-  <li><a href="#un-solo-paso-de-la-convolución" id="toc-un-solo-paso-de-la-convolución" class="nav-link" data-scroll-target="#un-solo-paso-de-la-convolución"><span class="header-section-number">2.2</span> Un solo paso de la convolución</a>
+  <li><a href="#paso-único-de-la-convolución" id="toc-paso-único-de-la-convolución" class="nav-link" data-scroll-target="#paso-único-de-la-convolución"><span class="header-section-number">2.2</span> Paso único de la convolución</a>
   <ul class="collapse">
   <li><a href="#ejercicio-2---conv_single_step" id="toc-ejercicio-2---conv_single_step" class="nav-link" data-scroll-target="#ejercicio-2---conv_single_step"><span class="header-section-number">2.2.1</span> Ejercicio 2 - conv_single_step</a></li>
   </ul></li>
@@ -317,7 +317,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p align="center">
 <img src="images/conv_nn.png" style="width:350px;height:200px;">
 </p>
-<p>En esta parte, se construirán todos los pasos de la capa de convolución. Se comenzará implementando dos funciones auxiliares: una para el zero-padding y otra para calcular la función de convolución en sí.</p>
+<p>En esta parte, se construyen todos los pasos de la capa de convolución. Se comenzará implementando dos funciones auxiliares:<br>
+* una para el zero-padding * una para calcular la función de convolución en sí.</p>
 <p><a name="2-1"></a></p>
 <section id="zero-padding" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="zero-padding"><span class="header-section-number">2.1</span> Zero-Padding</h2>
@@ -330,12 +331,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p></p>
 <p>Los principales beneficios del padding son:</p>
-<p>Permite utilizar una capa CONV sin reducir necesariamente la altura y el ancho de los volúmenes. Esto es importante para construir redes más profundas, ya que de lo contrario, la altura y el ancho disminuirían al avanzar hacia capas más profundas. Un caso especial importante es la convolución “same”, en la que la altura y el ancho se preservan exactamente después de una capa.</p>
+<p>Permite utilizar una capa CONV sin reducir necesariamente la altura y el ancho de los volúmenes. Esto es importante para construir redes más profundas, ya que de lo contrario, la altura y el ancho disminuirían al avanzar hacia capas más profundas. Un caso especial importante es la convolución “same”, en la que la altura y el ancho se mantienen constantes después de una capa.</p>
 <p>Ayuda a conservar más información en el borde de una imagen. Sin relleno, muy pocos valores en la capa siguiente se verían afectados por los píxeles en los bordes de una imagen.</p>
 <p><a name="ex-1"></a></p>
 <section id="ejercicio-1---zero_pad" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="ejercicio-1---zero_pad"><span class="header-section-number">2.1.1</span> Ejercicio 1 - zero_pad</h3>
-<p>Se debe implementar la siguiente función, que añade zero-padding a todas las imágenes de un batch de ejemplos X.</p>
+<p>Se implmenta una función para añadir zero-padding a todas las imágenes de un batch de ejemplos X.</p>
 <p>Por ejemplo, si se desea añadir un relleno de pad = 1 para la segunda dimensión, pad = 3 para la cuarta dimensión y pad = 0 para el resto a un array “a” de forma <span class="math inline">\((5,5,5,5,5)\)</span>, se haría de la siguiente manera:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> np.pad(a, ((<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">1</span>,<span class="dv">1</span>), (<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">3</span>,<span class="dv">3</span>), (<span class="dv">0</span>,<span class="dv">0</span>)), mode<span class="op">=</span><span class="st">'constant'</span>, constant_values <span class="op">=</span> (<span class="dv">0</span>,<span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell" data-execution_count="2">
@@ -427,9 +428,9 @@ Contenido de x_pad[1,1] =
 <p><a name="2-2"></a></p>
 </section>
 </section>
-<section id="un-solo-paso-de-la-convolución" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="un-solo-paso-de-la-convolución"><span class="header-section-number">2.2</span> Un solo paso de la convolución</h2>
-<p>En esta parte, se implementará un solo paso de la convolución, en el cual se aplciará el filtro a una única posición de la entrada. Esto se utilizará para construir una unidad convolucional, que:</p>
+<section id="paso-único-de-la-convolución" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="paso-único-de-la-convolución"><span class="header-section-number">2.2</span> Paso único de la convolución</h2>
+<p>A continuación se implementa un solo paso de la convolución, en el cual se aplica el filtro a una única posición de la entrada. Esto se utiliza posteriormente para construir una unidad convolucional, que:</p>
 <ul>
 <li>Toma un volumen de entrada</li>
 <li>Aplica un filtro en cada posición de la entrada</li>
@@ -503,10 +504,10 @@ Contenido de x_pad[1,1] =
 <p><a name="ex-3"></a></p>
 <section id="exercise-3---conv_forward" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="exercise-3---conv_forward"><span class="header-section-number">2.3.1</span> Exercise 3 - conv_forward</h3>
-<p>Se implementará la función a continuación para convolucionar los filtros W sobre una activación de entrada A_prev. Esta función toma los siguientes parámetros:</p>
+<p>Se implementa la función a continuación para convolucionar los filtros <span class="math inline">\(W\)</span> sobre una activación de entrada <code>A_prev</code>. Esta función toma los siguientes parámetros:</p>
 <ul>
-<li><code>A_prev</code>, las activaciones producidas por la capa anterior (para un batc de <span class="math inline">\(m\)</span> entradas);</li>
-<li>Los pesos se denotan con <code>W</code>. El tamaño de la ventana del filtro es <span class="math inline">\(f x f\)</span> .</li>
+<li><code>A_prev</code>, las activaciones producidas por la capa anterior (para un batch de <span class="math inline">\(m\)</span> entradas);</li>
+<li>Los pesos se denotan con <code>W</code>. El tamaño de la ventana del filtro es <span class="math inline">\(f \times f\)</span> .</li>
 <li>El vector de sesgo es <code>b</code>, donde cada filtro tiene su propio sesgo (único). También se tiene acceso al diccionario de hiperparámetros, que contiene el paso (stride) y el relleno (padding).</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled" title="**Hint**">
@@ -526,7 +527,7 @@ Contenido de x_pad[1,1] =
 <p>Notese cómo esto da una porción 3D que tiene altura 2, ancho 2 y profundidad 3. La profundidad es el número de canales.</p>
 <p>Esto será útil cuando se defina <code>a_slice_prev</code> a continuación, utilizando los índices <code>start/end</code> que se definirán.</p>
 <ol start="2" type="1">
-<li>Para definir a_slice se necesitará primero definir sus esquinas <code>vert_start</code>, <code>vert_end</code>, <code>horiz_start</code> y <code>horiz_end</code>. La siguiente figura puede ser útil para descubrir cómo cada una de las esquinas puede ser definida usando <span class="math inline">\(h\)</span>, <span class="math inline">\(w\)</span>, <span class="math inline">\(f\)</span> y <span class="math inline">\(s\)</span> en el código a continuación.</li>
+<li>Para definir <code>a_slice</code> se necesitará primero definir sus esquinas <code>vert_start</code>, <code>vert_end</code>, <code>horiz_start</code> y <code>horiz_end</code>. La siguiente figura puede ser útil para descubrir cómo cada una de las esquinas puede ser definida usando <span class="math inline">\(h\)</span>, <span class="math inline">\(w\)</span>, <span class="math inline">\(f\)</span> y <span class="math inline">\(s\)</span> en el código a continuación.</li>
 </ol>
 <p align="center">
 <img src="images/vert_horiz_kiank.png" style="width:400px;height:300px;">
@@ -612,7 +613,7 @@ Contenido de x_pad[1,1] =
 <span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Z, cache</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="8">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
@@ -647,8 +648,8 @@ cache_conv[0][1][2][3] =
 <h1 data-number="3"><span class="header-section-number">3</span> Pooling Layer</h1>
 <p>La capa de pooling (POOL) reduce la altura y el ancho de la entrada. Contribuye a la reducción del cálculo, así como a la invariancia de los detectores de características frente a su posición en la entrada. Existen dos tipos de capas de pooling:</p>
 <ul>
-<li><p><strong>Max-pooling layer</strong>: slides an (<span class="math inline">\(f, f\)</span>) window over the input and stores the max value of the window in the output.</p></li>
-<li><p><strong>Average-pooling layer</strong>: slides an (<span class="math inline">\(f, f\)</span>) window over the input and stores the average value of the window in the output.</p></li>
+<li><p><strong>Max-pooling layer</strong>: desliza una ventana de tamaño (<span class="math inline">\(f, f\)</span>) sobre la entrada y almacena el valor máximo de la ventana en la salida.</p></li>
+<li><p><strong>Average-pooling layer</strong>: desliza una ventana de tamaño (<span class="math inline">\(f, f\)</span>) sobre la entrada y almacena el valor promedio de la ventana en la salida.</p></li>
 </ul>
 
 <table>
@@ -660,11 +661,11 @@ cache_conv[0][1][2][3] =
 </td><td>
 
 </td></tr></tbody></table>
-<p>Estas cpasa de pooling no tienen parámetros que entrenar durante el backpropagation, pero si tienen hiperparámetros como el <code>window size</code> <span class="math inline">\(f\)</span>, que especifica la altura y ancho de la ventana <span class="math inline">\(f \times f\)</span> sobre la cual se calcula el máximo o el promedio (<em>max</em> o <em>average</em>).</p>
+<p>Estas capas de pooling no tienen parámetros que entrenar durante el backpropagation, pero si tienen hiperparámetros como el <code>window size</code> <span class="math inline">\(f\)</span>, que especifica la altura y ancho de la ventana <span class="math inline">\(f \times f\)</span> sobre la cual se calcula el máximo o el promedio (<em>max</em> o <em>average</em>).</p>
 <p><a name="4-1"></a></p>
 <section id="forward-pooling" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="forward-pooling"><span class="header-section-number">3.1</span> Forward Pooling</h2>
-<p>En la sección se implementarán tanto el MAX-POOL como el AVG-POOL dentro de la misma función.</p>
+<p>En la sección se implementan tanto el MAX-POOL como el AVG-POOL dentro de la misma función.</p>
 <p><a name="ex-4"></a></p>
 <section id="exercise-4---pool_forward" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="exercise-4---pool_forward"><span class="header-section-number">3.1.1</span> Exercise 4 - pool_forward</h3>
@@ -672,7 +673,7 @@ cache_conv[0][1][2][3] =
 <p><span class="math display">\[\text{ancho de salida, } n_H = \Bigl\lfloor \frac{n_{H_{prev}} - f}{stride} \Bigr\rfloor +1\]</span></p>
 <p><span class="math display">\[\text{ancho de salida, }n_W = \Bigl\lfloor \frac{n_{W_{prev}} - f}{stride} \Bigr\rfloor +1\]</span></p>
 <p><span class="math display">\[\text{número de canales de salida, }n_C = n_{C_{prev}}\]</span></p>
-<div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="9">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pool_forward(A_prev, hparameters, mode <span class="op">=</span> <span class="st">"max"</span>):</span>
@@ -742,7 +743,7 @@ cache_conv[0][1][2][3] =
 <span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A, cache</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="10">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Case 1: stride of 1</span></span>
@@ -779,7 +780,7 @@ A[1, 1] =
  [ 0.11872677  0.17255229 -0.22112197]]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="11">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Case 2: stride of 2</span></span>
@@ -820,7 +821,16 @@ A[1] =
   [ 0.15077452  0.28911175  0.00123239]]]</code></pre>
 </div>
 </div>
-<p><strong>Lecciones</strong></p>
+<div class="callout callout-style-default callout-note callout-titled" title="**Lecciones**">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<strong>Lecciones</strong>
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li>Una convolución extrae características de una imagen de entrada tomando el dot product entre los datos de entrada y un array 3D de pesos (el filtro).</li>
 <li>El resultado 2D de la convolución se denomina <strong>feature map</strong>.</li>
@@ -831,14 +841,17 @@ A[1] =
 <li>El zero-padding ayuda a conservar más información en los bordes de la imagen y es útil para construir redes más profundas, ya que se puede construir una capa CONV sin reducir la altura y el ancho de los volúmenes.</li>
 <li>Las pooling layers reducen gradualmente la altura y el ancho de la entrada deslizando una ventana 2D sobre cada región especificada, luego resumiendo las características en esa región.</li>
 </ul>
+</div>
+</div>
 <p><a name="5"></a></p>
 </section>
 </section>
 </section>
 <section id="backpropagation-en-las-convolutional-neural-networks" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Backpropagation en las Convolutional Neural Networks</h1>
-<p>En los frameworks de deep learning, solo se necesita implementar el forward pass, y el framework se encarga del backpropagation, por lo que la mayoría de los ingenieros de deep learning no necesitan preocuparse por susdetalles.</p>
-<p>Cuando se implementa una red neuronal simple (fully-connected), se utiliza la retropropagación para calcular las derivadas con respecto al loss para actualizar los parámetros. De manera similar, en las redes neuronales convolucionales se pueden calcular las derivadas con respecto al costo para actualizar los parámetros. Las ecuaciones de retropropagación se presentan brevemente a continuación.</p>
+<p>En los frameworks de deep learning, solo se necesita implementar el forward pass, ya que el propio framework se encarga del backpropagation, por lo que la mayoría de los ingenieros de deep learning no necesitan preocuparse por sus detalles.</p>
+<p>Cuando se implementa una red neuronal simple (fully-connected), se utiliza la retropropagación para calcular las derivadas con respecto al loss para actualizar los parámetros. De manera similar, en las redes neuronales convolucionales se pueden calcular las derivadas con respecto al costo para actualizar los parámetros.</p>
+<p>Las ecuaciones de retropropagación se presentan brevemente a continuación.</p>
 <p><a name="5-1"></a></p>
 <section id="convolutional-layer-backward-pass" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="convolutional-layer-backward-pass"><span class="header-section-number">4.1</span> Convolutional Layer Backward Pass</h2>
@@ -846,7 +859,7 @@ A[1] =
 <p><a name="5-1-1"></a></p>
 <section id="cálculo-de-da" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="cálculo-de-da"><span class="header-section-number">4.1.1</span> Cálculo de <span class="math inline">\(dA\)</span>:</h3>
-<p>This is the formula for computing <span class="math inline">\(dA\)</span> with respect to the cost for a certain filter <span class="math inline">\(W_c\)</span> and a given training example:</p>
+<p>Esta es la fórmula para el cálculo de <span class="math inline">\(dA\)</span> con respecto al coste para un cierto filtro <span class="math inline">\(W_c\)</span> y una muestra de entrenamiento data.</p>
 <p><span class="math display">\[dA \mathrel{+}= \sum _{h=0} ^{n_H} \sum_{w=0} ^{n_W} W_c \times dZ_{hw} \tag{1}\]</span></p>
 <p>Donde <span class="math inline">\(W_c\)</span> es un filtro y <span class="math inline">\(dZ_{hw}\)</span> un escalar correspondiente al gradiente del loss con respecto a la salida de la capa convolucional <span class="math inline">\(Z\)</span> en la fila <span class="math inline">\(h\)</span> y columna <span class="math inline">\(w\)</span> (correspondiente al dot-product tomado en el desplazamiento <span class="math inline">\(i\)</span> hacia la izquierda y el desplazamiento <span class="math inline">\(j\)</span> hacia abajo). Notese que en cada momento, se multiplica el mismo filtro <span class="math inline">\(W_c\)</span> por un <span class="math inline">\(dZ\)</span> diferente al actualizar <span class="math inline">\(dA\)</span>. Esto se debe pricipalmente a que cuanto se calcula el forward pass, cada filtro realiza el dot-product y es sumado por un <span class="math inline">\(a_{slice}\)</span> distinto. Por lo tanto, al calcular el backpropagation para <span class="math inline">\(dA\)</span>, simplemente se estan sumando los gradientes de todos los <span class="math inline">\(a_{slices}\)</span>.</p>
 <p>En código, dentro de los bucles for apropiados, esta fórmula se traduce en:</p>
@@ -873,7 +886,7 @@ A[1] =
 <section id="exercise-5---conv_backward" class="level3" data-number="4.1.4">
 <h3 data-number="4.1.4" class="anchored" data-anchor-id="exercise-5---conv_backward"><span class="header-section-number">4.1.4</span> Exercise 5 - conv_backward</h3>
 <p>A continuación, se implementa la función <code>conv_backward</code>. You should sum over all the training examples, filters, heights, and widths. You should then compute the derivatives using formulas 1, 2 and 3 above.</p>
-<div class="cell" data-execution_count="18">
+<div class="cell" data-execution_count="12">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> conv_backward(dZ, cache):</span>
@@ -950,7 +963,7 @@ A[1] =
 <span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dA_prev, dW, db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="19">
+<div class="cell" data-execution_count="13">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll run conv_forward to initialize the 'Z' and 'cache_conv",</span></span>
@@ -1000,7 +1013,7 @@ db_mean = 7.839232564616838</code></pre>
 <section id="exercise-6---create_mask_from_window" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="exercise-6---create_mask_from_window"><span class="header-section-number">4.2.2</span> Exercise 6 - create_mask_from_window</h3>
 <p>Se implementa la función <code>create_mask_from_window()</code>. Esta función será de ayuda durante el pooling de la retropropagación.</p>
-<div class="cell" data-execution_count="20">
+<div class="cell" data-execution_count="14">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_mask_from_window(x):</span>
@@ -1019,7 +1032,7 @@ db_mean = 7.839232564616838</code></pre>
 <span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mask</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="23">
+<div class="cell" data-execution_count="15">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
@@ -1064,7 +1077,7 @@ mask =
 <section id="exercise-7---distribute_value" class="level3" data-number="4.2.4">
 <h3 data-number="4.2.4" class="anchored" data-anchor-id="exercise-7---distribute_value"><span class="header-section-number">4.2.4</span> Exercise 7 - distribute_value</h3>
 <p>A continuación se implementa la función <code>distribute_value</code> para distribuir equitativamente un valor dz a través de una matriz de dimensión shape.</p>
-<div class="cell" data-execution_count="24">
+<div class="cell" data-execution_count="16">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> distribute_value(dz, shape):</span>
@@ -1090,7 +1103,7 @@ mask =
 <span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="26">
+<div class="cell" data-execution_count="17">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> distribute_value(<span class="dv">2</span>, (<span class="dv">2</span>, <span class="dv">2</span>))</span>
@@ -1106,13 +1119,13 @@ mask =
 </section>
 <section id="putting-it-together-pooling-backward" class="level3" data-number="4.2.5">
 <h3 data-number="4.2.5" class="anchored" data-anchor-id="putting-it-together-pooling-backward"><span class="header-section-number">4.2.5</span> Putting it Together: Pooling Backward</h3>
-<p>Ahora se dispoonen de todos los elementos para calcular el back propagation en una pooling layer.</p>
+<p>Ahora se dispone de todos los elementos para calcular el back propagation en una pooling layer.</p>
 <p><a name="ex-8"></a></p>
 </section>
 <section id="exercise-8---pool_backward" class="level3" data-number="4.2.6">
 <h3 data-number="4.2.6" class="anchored" data-anchor-id="exercise-8---pool_backward"><span class="header-section-number">4.2.6</span> Exercise 8 - pool_backward</h3>
 <p>Se implementa la función <code>pool_backward</code> en ambos modos (<code>"max"</code> and <code>"average"</code>). Nuevamente, se utilizan 4 bucles for (iterando sobre los ejemplos de entrenamiento, altura, anchura y canales). Se emprea un <code>if/elif</code> para verificar si el modo es igual a <code>'max'</code> o <code>'average'</code>. Si es igual a ‘average’ se usa la función <code>distribute_value()</code> implementada anteriormente para crear una matriz de la misma dimensión que <code>a_slice</code>. De lo contrario, si el mdoo es igual a ‘<code>max</code>’, se crea una máscara con <code>create_mask_from_window()</code> y se multiplica por el valor correspondiente de <span class="math inline">\(dA\)</span>.</p>
-<div class="cell">
+<div class="cell" data-execution_count="18">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pool_backward(dA, cache, mode <span class="op">=</span> <span class="st">"max"</span>):</span>
@@ -1184,6 +1197,46 @@ mask =
 <span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dA_prev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+</div>
+<div class="cell" data-execution_count="20">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>A_prev <span class="op">=</span> np.random.randn(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>hparameters <span class="op">=</span> {<span class="st">"stride"</span> : <span class="dv">1</span>, <span class="st">"f"</span>: <span class="dv">2</span>}</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>A, cache <span class="op">=</span> pool_forward(A_prev, hparameters)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A.shape)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cache[<span class="dv">0</span>].shape)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>dA <span class="op">=</span> np.random.randn(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>dA_prev1 <span class="op">=</span> pool_backward(dA, cache, mode <span class="op">=</span> <span class="st">"max"</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mode = max"</span>)</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'mean of dA = '</span>, np.mean(dA))</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'dA_prev1[1,1] = </span><span class="ch">\n</span><span class="st">'</span>, dA_prev1[<span class="dv">1</span>, <span class="dv">1</span>])  </span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>dA_prev2 <span class="op">=</span> pool_backward(dA, cache, mode <span class="op">=</span> <span class="st">"average"</span>)</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mode = average"</span>)</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'mean of dA = '</span>, np.mean(dA))</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'dA_prev2[1,1] = </span><span class="ch">\n</span><span class="st">'</span>, dA_prev2[<span class="dv">1</span>, <span class="dv">1</span>]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>(5, 4, 2, 2)
+(5, 5, 3, 2)
+mode = max
+mean of dA =  0.14571390272918056
+dA_prev1[1,1] = 
+ [[ 0.          0.        ]
+ [ 5.05844394 -1.68282702]
+ [ 0.          0.        ]]
+
+mode = average
+mean of dA =  0.14571390272918056
+dA_prev2[1,1] = 
+ [[ 0.08485462  0.2787552 ]
+ [ 1.26461098 -0.25749373]
+ [ 1.17975636 -0.53624893]]</code></pre>
+</div>
 </div>
 
 
