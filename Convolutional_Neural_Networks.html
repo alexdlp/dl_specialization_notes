@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Alex de la Puente">
 
 <title>. - 1&nbsp; Redes neuronales convolucionales: paso a paso</title>
 <style>
@@ -194,36 +193,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#redes-neuronales-convolucionales-paso-a-paso" id="toc-redes-neuronales-convolucionales-paso-a-paso" class="nav-link active" data-scroll-target="#redes-neuronales-convolucionales-paso-a-paso"><span class="header-section-number">2</span> Redes neuronales convolucionales: paso a paso</a>
+  <li><a href="#librerías" id="toc-librerías" class="nav-link active" data-scroll-target="#librerías"><span class="header-section-number">1.1</span> Librerías</a></li>
+  <li><a href="#convolutional-neural-networks" id="toc-convolutional-neural-networks" class="nav-link" data-scroll-target="#convolutional-neural-networks"><span class="header-section-number">2</span> Convolutional Neural Networks</a>
   <ul class="collapse">
-  <li><a href="#contenidos" id="toc-contenidos" class="nav-link" data-scroll-target="#contenidos"><span class="header-section-number">2.1</span> Contenidos</a></li>
-  <li><a href="#librerías" id="toc-librerías" class="nav-link" data-scroll-target="#librerías"><span class="header-section-number">2.2</span> 1 - Librerías</a></li>
-  <li><a href="#convolutional-neural-networks" id="toc-convolutional-neural-networks" class="nav-link" data-scroll-target="#convolutional-neural-networks"><span class="header-section-number">2.3</span> 2 - Convolutional Neural Networks</a>
+  <li><a href="#zero-padding" id="toc-zero-padding" class="nav-link" data-scroll-target="#zero-padding"><span class="header-section-number">2.1</span> Zero-Padding</a>
   <ul class="collapse">
-  <li><a href="#zero-padding" id="toc-zero-padding" class="nav-link" data-scroll-target="#zero-padding"><span class="header-section-number">2.3.1</span> 2.1 - Zero-Padding</a></li>
-  <li><a href="#ejercicio-1---zero_pad" id="toc-ejercicio-1---zero_pad" class="nav-link" data-scroll-target="#ejercicio-1---zero_pad"><span class="header-section-number">2.3.2</span> Ejercicio 1 - zero_pad</a></li>
-  <li><a href="#un-solo-paso-de-la-convolución" id="toc-un-solo-paso-de-la-convolución" class="nav-link" data-scroll-target="#un-solo-paso-de-la-convolución"><span class="header-section-number">2.3.3</span> 2.2 - Un solo paso de la convolución</a></li>
-  <li><a href="#ejercicio-2---conv_single_step" id="toc-ejercicio-2---conv_single_step" class="nav-link" data-scroll-target="#ejercicio-2---conv_single_step"><span class="header-section-number">2.3.4</span> Ejercicio 2 - conv_single_step</a></li>
-  <li><a href="#convolutional-neural-networks---forward-pass" id="toc-convolutional-neural-networks---forward-pass" class="nav-link" data-scroll-target="#convolutional-neural-networks---forward-pass"><span class="header-section-number">2.3.5</span> 2.3 - Convolutional Neural Networks - Forward Pass</a></li>
-  <li><a href="#exercise-3---conv_forward" id="toc-exercise-3---conv_forward" class="nav-link" data-scroll-target="#exercise-3---conv_forward"><span class="header-section-number">2.3.6</span> Exercise 3 - conv_forward</a></li>
+  <li><a href="#ejercicio-1---zero_pad" id="toc-ejercicio-1---zero_pad" class="nav-link" data-scroll-target="#ejercicio-1---zero_pad"><span class="header-section-number">2.1.1</span> Ejercicio 1 - zero_pad</a></li>
   </ul></li>
-  <li><a href="#pooling-layer" id="toc-pooling-layer" class="nav-link" data-scroll-target="#pooling-layer"><span class="header-section-number">2.4</span> 4 - Pooling Layer</a>
+  <li><a href="#un-solo-paso-de-la-convolución" id="toc-un-solo-paso-de-la-convolución" class="nav-link" data-scroll-target="#un-solo-paso-de-la-convolución"><span class="header-section-number">2.2</span> Un solo paso de la convolución</a>
   <ul class="collapse">
-  <li><a href="#forward-pooling" id="toc-forward-pooling" class="nav-link" data-scroll-target="#forward-pooling"><span class="header-section-number">2.4.1</span> 4.1 - Forward Pooling</a></li>
-  <li><a href="#exercise-4---pool_forward" id="toc-exercise-4---pool_forward" class="nav-link" data-scroll-target="#exercise-4---pool_forward"><span class="header-section-number">2.4.2</span> Exercise 4 - pool_forward</a></li>
+  <li><a href="#ejercicio-2---conv_single_step" id="toc-ejercicio-2---conv_single_step" class="nav-link" data-scroll-target="#ejercicio-2---conv_single_step"><span class="header-section-number">2.2.1</span> Ejercicio 2 - conv_single_step</a></li>
   </ul></li>
-  <li><a href="#backpropagation-en-las-convolutional-neural-networks" id="toc-backpropagation-en-las-convolutional-neural-networks" class="nav-link" data-scroll-target="#backpropagation-en-las-convolutional-neural-networks"><span class="header-section-number">2.5</span> 5 - Backpropagation en las Convolutional Neural Networks</a>
+  <li><a href="#forward-pass" id="toc-forward-pass" class="nav-link" data-scroll-target="#forward-pass"><span class="header-section-number">2.3</span> Forward Pass</a>
   <ul class="collapse">
-  <li><a href="#convolutional-layer-backward-pass" id="toc-convolutional-layer-backward-pass" class="nav-link" data-scroll-target="#convolutional-layer-backward-pass"><span class="header-section-number">2.5.1</span> 5.1 - Convolutional Layer Backward Pass</a></li>
-  <li><a href="#exercise-5---conv_backward" id="toc-exercise-5---conv_backward" class="nav-link" data-scroll-target="#exercise-5---conv_backward"><span class="header-section-number">2.5.2</span> Exercise 5 - conv_backward</a></li>
+  <li><a href="#exercise-3---conv_forward" id="toc-exercise-3---conv_forward" class="nav-link" data-scroll-target="#exercise-3---conv_forward"><span class="header-section-number">2.3.1</span> Exercise 3 - conv_forward</a></li>
   </ul></li>
-  <li><a href="#pooling-layer---backward-pass" id="toc-pooling-layer---backward-pass" class="nav-link" data-scroll-target="#pooling-layer---backward-pass"><span class="header-section-number">2.6</span> 5.2 Pooling Layer - Backward Pass</a>
+  </ul></li>
+  <li><a href="#pooling-layer" id="toc-pooling-layer" class="nav-link" data-scroll-target="#pooling-layer"><span class="header-section-number">3</span> Pooling Layer</a>
   <ul class="collapse">
-  <li><a href="#max-pooling---backward-pass" id="toc-max-pooling---backward-pass" class="nav-link" data-scroll-target="#max-pooling---backward-pass"><span class="header-section-number">2.6.1</span> 5.2.1 Max Pooling - Backward Pass</a></li>
-  <li><a href="#average-pooling---backward-pass" id="toc-average-pooling---backward-pass" class="nav-link" data-scroll-target="#average-pooling---backward-pass"><span class="header-section-number">2.6.2</span> 5.2.2 - Average Pooling - Backward Pass</a></li>
-  <li><a href="#exercise-7---distribute_value" id="toc-exercise-7---distribute_value" class="nav-link" data-scroll-target="#exercise-7---distribute_value"><span class="header-section-number">2.6.3</span> Exercise 7 - distribute_value</a></li>
-  <li><a href="#putting-it-together-pooling-backward" id="toc-putting-it-together-pooling-backward" class="nav-link" data-scroll-target="#putting-it-together-pooling-backward"><span class="header-section-number">2.6.4</span> 5.2.3 Putting it Together: Pooling Backward</a></li>
-  <li><a href="#exercise-8---pool_backward" id="toc-exercise-8---pool_backward" class="nav-link" data-scroll-target="#exercise-8---pool_backward"><span class="header-section-number">2.6.5</span> Exercise 8 - pool_backward</a></li>
+  <li><a href="#forward-pooling" id="toc-forward-pooling" class="nav-link" data-scroll-target="#forward-pooling"><span class="header-section-number">3.1</span> Forward Pooling</a>
+  <ul class="collapse">
+  <li><a href="#exercise-4---pool_forward" id="toc-exercise-4---pool_forward" class="nav-link" data-scroll-target="#exercise-4---pool_forward"><span class="header-section-number">3.1.1</span> Exercise 4 - pool_forward</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#backpropagation-en-las-convolutional-neural-networks" id="toc-backpropagation-en-las-convolutional-neural-networks" class="nav-link" data-scroll-target="#backpropagation-en-las-convolutional-neural-networks"><span class="header-section-number">4</span> Backpropagation en las Convolutional Neural Networks</a>
+  <ul class="collapse">
+  <li><a href="#convolutional-layer-backward-pass" id="toc-convolutional-layer-backward-pass" class="nav-link" data-scroll-target="#convolutional-layer-backward-pass"><span class="header-section-number">4.1</span> Convolutional Layer Backward Pass</a>
+  <ul class="collapse">
+  <li><a href="#cálculo-de-da" id="toc-cálculo-de-da" class="nav-link" data-scroll-target="#cálculo-de-da"><span class="header-section-number">4.1.1</span> Cálculo de <span class="math inline">\(dA\)</span>:</a></li>
+  <li><a href="#cálculo-de-dw" id="toc-cálculo-de-dw" class="nav-link" data-scroll-target="#cálculo-de-dw"><span class="header-section-number">4.1.2</span> Cálculo de <span class="math inline">\(dW\)</span>:</a></li>
+  <li><a href="#cálculo-de-db" id="toc-cálculo-de-db" class="nav-link" data-scroll-target="#cálculo-de-db"><span class="header-section-number">4.1.3</span> Cálculo de <span class="math inline">\(db\)</span>:</a></li>
+  <li><a href="#exercise-5---conv_backward" id="toc-exercise-5---conv_backward" class="nav-link" data-scroll-target="#exercise-5---conv_backward"><span class="header-section-number">4.1.4</span> Exercise 5 - conv_backward</a></li>
+  </ul></li>
+  <li><a href="#pooling-layer---backward-pass" id="toc-pooling-layer---backward-pass" class="nav-link" data-scroll-target="#pooling-layer---backward-pass"><span class="header-section-number">4.2</span> Pooling Layer - Backward Pass</a>
+  <ul class="collapse">
+  <li><a href="#max-pooling---backward-pass" id="toc-max-pooling---backward-pass" class="nav-link" data-scroll-target="#max-pooling---backward-pass"><span class="header-section-number">4.2.1</span> Max Pooling - Backward Pass</a></li>
+  <li><a href="#exercise-6---create_mask_from_window" id="toc-exercise-6---create_mask_from_window" class="nav-link" data-scroll-target="#exercise-6---create_mask_from_window"><span class="header-section-number">4.2.2</span> Exercise 6 - create_mask_from_window</a></li>
+  <li><a href="#average-pooling---backward-pass" id="toc-average-pooling---backward-pass" class="nav-link" data-scroll-target="#average-pooling---backward-pass"><span class="header-section-number">4.2.3</span> Average Pooling - Backward Pass</a></li>
+  <li><a href="#exercise-7---distribute_value" id="toc-exercise-7---distribute_value" class="nav-link" data-scroll-target="#exercise-7---distribute_value"><span class="header-section-number">4.2.4</span> Exercise 7 - distribute_value</a></li>
+  <li><a href="#putting-it-together-pooling-backward" id="toc-putting-it-together-pooling-backward" class="nav-link" data-scroll-target="#putting-it-together-pooling-backward"><span class="header-section-number">4.2.5</span> Putting it Together: Pooling Backward</a></li>
+  <li><a href="#exercise-8---pool_backward" id="toc-exercise-8---pool_backward" class="nav-link" data-scroll-target="#exercise-8---pool_backward"><span class="header-section-number">4.2.6</span> Exercise 8 - pool_backward</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -241,19 +250,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Alex de la Puente </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">Invalid Date</p>
-    </div>
-  </div>
   
     
   </div>
@@ -261,16 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="redes-neuronales-convolucionales-paso-a-paso" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Redes neuronales convolucionales: paso a paso</h1>
-<p>Esta es la primera tarea del Curso 4. En esta tarea se implementan capas de convolución (CONV) y de pooling (POOL) en numpy, incluyendo tanto el fordward propagation como el backward propagation.</p>
-<p>Al final de este cuaderno, serás capaz de:</p>
-<ul>
-<li>Explicar la operación de convolución.</li>
-<li>Aplicar dos tipos diferentes de operaciones de agrupamiento.</li>
-<li>Identificar los componentes utilizados en una red neuronal convolucional (padding, stride, filtro, …) y su propósito.</li>
-<li>Construir una red neuronal convolucional.</li>
-</ul>
+<p>En este notebook se implementan capas de convolución (CONV) y de pooling (POOL) en numpy, incluyendo tanto el fordward propagation como el backward propagation.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="**Notación**">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -302,30 +290,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="contenidos" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="contenidos"><span class="header-section-number">2.1</span> Contenidos</h2>
-<ul>
-<li><a href="#1">1 - Librerías</a></li>
-<li><a href="#2">2 - Convolutional Neural Networks</a>
-<ul>
-<li><a href="#2-1">2.1 - Zero-Padding</a>
-<ul>
-<li><a href="#ex-1">Exercise 1 - zero_pad</a></li>
-</ul></li>
-<li><a href="#2-2">2.2 - Single Step of Convolution</a>
-<ul>
-<li><a href="#ex-2">Exercise 2 - conv_single_step</a></li>
-</ul></li>
-<li><a href="#2-3">2.3 - Convolutional Neural Networks - Forward Pass</a>
-<ul>
-<li><a href="#ex-3">Exercise 3 - conv_forward</a></li>
-</ul></li>
-</ul></li>
-</ul>
 <p><a name="1"></a></p>
-</section>
-<section id="librerías" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="librerías"><span class="header-section-number">2.2</span> 1 - Librerías</h2>
+<section id="librerías" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="librerías"><span class="header-section-number">1.1</span> Librerías</h2>
 <div class="cell" data-execution_count="1">
 <details>
 <summary>Code</summary>
@@ -344,16 +311,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><a name="2"></a></p>
 </section>
-<section id="convolutional-neural-networks" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="convolutional-neural-networks"><span class="header-section-number">2.3</span> 2 - Convolutional Neural Networks</h2>
+<section id="convolutional-neural-networks" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Convolutional Neural Networks</h1>
 <p>Una capa de convolución transforma un volumen de entrada en un volumen de salida de tamaño diferente, como se muestra a continuación:</p>
 <p align="center">
 <img src="images/conv_nn.png" style="width:350px;height:200px;">
 </p>
 <p>En esta parte, se construirán todos los pasos de la capa de convolución. Se comenzará implementando dos funciones auxiliares: una para el zero-padding y otra para calcular la función de convolución en sí.</p>
 <p><a name="2-1"></a></p>
-<section id="zero-padding" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="zero-padding"><span class="header-section-number">2.3.1</span> 2.1 - Zero-Padding</h3>
+<section id="zero-padding" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="zero-padding"><span class="header-section-number">2.1</span> Zero-Padding</h2>
 <p align="center">
 <img src="images/PAD.png" style="width:600px;height:400px;">
 
@@ -366,9 +333,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Permite utilizar una capa CONV sin reducir necesariamente la altura y el ancho de los volúmenes. Esto es importante para construir redes más profundas, ya que de lo contrario, la altura y el ancho disminuirían al avanzar hacia capas más profundas. Un caso especial importante es la convolución “same”, en la que la altura y el ancho se preservan exactamente después de una capa.</p>
 <p>Ayuda a conservar más información en el borde de una imagen. Sin relleno, muy pocos valores en la capa siguiente se verían afectados por los píxeles en los bordes de una imagen.</p>
 <p><a name="ex-1"></a></p>
-</section>
-<section id="ejercicio-1---zero_pad" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="ejercicio-1---zero_pad"><span class="header-section-number">2.3.2</span> Ejercicio 1 - zero_pad</h3>
+<section id="ejercicio-1---zero_pad" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="ejercicio-1---zero_pad"><span class="header-section-number">2.1.1</span> Ejercicio 1 - zero_pad</h3>
 <p>Se debe implementar la siguiente función, que añade zero-padding a todas las imágenes de un batch de ejemplos X.</p>
 <p>Por ejemplo, si se desea añadir un relleno de pad = 1 para la segunda dimensión, pad = 3 para la cuarta dimensión y pad = 0 para el resto a un array “a” de forma <span class="math inline">\((5,5,5,5,5)\)</span>, se haría de la siguiente manera:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> np.pad(a, ((<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">1</span>,<span class="dv">1</span>), (<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">3</span>,<span class="dv">3</span>), (<span class="dv">0</span>,<span class="dv">0</span>)), mode<span class="op">=</span><span class="st">'constant'</span>, constant_values <span class="op">=</span> (<span class="dv">0</span>,<span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -460,8 +426,9 @@ Contenido de x_pad[1,1] =
 </div>
 <p><a name="2-2"></a></p>
 </section>
-<section id="un-solo-paso-de-la-convolución" class="level3" data-number="2.3.3">
-<h3 data-number="2.3.3" class="anchored" data-anchor-id="un-solo-paso-de-la-convolución"><span class="header-section-number">2.3.3</span> 2.2 - Un solo paso de la convolución</h3>
+</section>
+<section id="un-solo-paso-de-la-convolución" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="un-solo-paso-de-la-convolución"><span class="header-section-number">2.2</span> Un solo paso de la convolución</h2>
 <p>En esta parte, se implementará un solo paso de la convolución, en el cual se aplciará el filtro a una única posición de la entrada. Esto se utilizará para construir una unidad convolucional, que:</p>
 <ul>
 <li>Toma un volumen de entrada</li>
@@ -478,9 +445,8 @@ Contenido de x_pad[1,1] =
 <p></p>
 <p>En una aplicación de computer vision, cada valor en la matriz de la izquierda corresponde a un solo valor de píxel. Se convoluciona un filtro de 3x3 con la imagen multiplicando sus valores elemento a elemento (element-wise) con la matriz original, luego sumándolos y añadiendo un sesgo (bias). En este primer paso, se implementa un solo paso de la convolución, correspondiente a aplicar un filtro a solo una de las posiciones para obtener una única salida de valor real.</p>
 <p><a name="ex-2"></a></p>
-</section>
-<section id="ejercicio-2---conv_single_step" class="level3" data-number="2.3.4">
-<h3 data-number="2.3.4" class="anchored" data-anchor-id="ejercicio-2---conv_single_step"><span class="header-section-number">2.3.4</span> Ejercicio 2 - conv_single_step</h3>
+<section id="ejercicio-2---conv_single_step" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="ejercicio-2---conv_single_step"><span class="header-section-number">2.2.1</span> Ejercicio 2 - conv_single_step</h3>
 <p>Implementa <code>conv_single_step()</code>.</p>
 <div class="cell" data-execution_count="5">
 <details>
@@ -526,17 +492,17 @@ Contenido de x_pad[1,1] =
 </div>
 <p><a name="2-3"></a></p>
 </section>
-<section id="convolutional-neural-networks---forward-pass" class="level3" data-number="2.3.5">
-<h3 data-number="2.3.5" class="anchored" data-anchor-id="convolutional-neural-networks---forward-pass"><span class="header-section-number">2.3.5</span> 2.3 - Convolutional Neural Networks - Forward Pass</h3>
+</section>
+<section id="forward-pass" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="forward-pass"><span class="header-section-number">2.3</span> Forward Pass</h2>
 <p>En el forward pass, se convolucionan múltiples filtros sobre la entrada. Cada ‘convolución’ proporciona una salida en forma de matriz 2D. Estas salidas se apilan para obtener un volumen 3D:</p>
 <center>
 <video width="620" height="440" src="images/conv_kiank.mp4" type="video/mp4" controls="">
 </video>
 </center>
 <p><a name="ex-3"></a></p>
-</section>
-<section id="exercise-3---conv_forward" class="level3" data-number="2.3.6">
-<h3 data-number="2.3.6" class="anchored" data-anchor-id="exercise-3---conv_forward"><span class="header-section-number">2.3.6</span> Exercise 3 - conv_forward</h3>
+<section id="exercise-3---conv_forward" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="exercise-3---conv_forward"><span class="header-section-number">2.3.1</span> Exercise 3 - conv_forward</h3>
 <p>Se implementará la función a continuación para convolucionar los filtros W sobre una activación de entrada A_prev. Esta función toma los siguientes parámetros:</p>
 <ul>
 <li><code>A_prev</code>, las activaciones producidas por la capa anterior (para un batc de <span class="math inline">\(m\)</span> entradas);</li>
@@ -577,7 +543,7 @@ Contenido de x_pad[1,1] =
 </div>
 </div>
 </div>
-<p>Para este ejercicio se implementará todo con bucles for.</p>
+<p>La implementación se realiza mediante bucles for.</p>
 <div class="cell" data-execution_count="7">
 <details>
 <summary>Code</summary>
@@ -676,8 +642,9 @@ cache_conv[0][1][2][3] =
 <p><a name="4"></a></p>
 </section>
 </section>
-<section id="pooling-layer" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="pooling-layer"><span class="header-section-number">2.4</span> 4 - Pooling Layer</h2>
+</section>
+<section id="pooling-layer" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Pooling Layer</h1>
 <p>La capa de pooling (POOL) reduce la altura y el ancho de la entrada. Contribuye a la reducción del cálculo, así como a la invariancia de los detectores de características frente a su posición en la entrada. Existen dos tipos de capas de pooling:</p>
 <ul>
 <li><p><strong>Max-pooling layer</strong>: slides an (<span class="math inline">\(f, f\)</span>) window over the input and stores the max value of the window in the output.</p></li>
@@ -695,13 +662,12 @@ cache_conv[0][1][2][3] =
 </td></tr></tbody></table>
 <p>Estas cpasa de pooling no tienen parámetros que entrenar durante el backpropagation, pero si tienen hiperparámetros como el <code>window size</code> <span class="math inline">\(f\)</span>, que especifica la altura y ancho de la ventana <span class="math inline">\(f \times f\)</span> sobre la cual se calcula el máximo o el promedio (<em>max</em> o <em>average</em>).</p>
 <p><a name="4-1"></a></p>
-<section id="forward-pooling" class="level3" data-number="2.4.1">
-<h3 data-number="2.4.1" class="anchored" data-anchor-id="forward-pooling"><span class="header-section-number">2.4.1</span> 4.1 - Forward Pooling</h3>
+<section id="forward-pooling" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="forward-pooling"><span class="header-section-number">3.1</span> Forward Pooling</h2>
 <p>En la sección se implementarán tanto el MAX-POOL como el AVG-POOL dentro de la misma función.</p>
 <p><a name="ex-4"></a></p>
-</section>
-<section id="exercise-4---pool_forward" class="level3" data-number="2.4.2">
-<h3 data-number="2.4.2" class="anchored" data-anchor-id="exercise-4---pool_forward"><span class="header-section-number">2.4.2</span> Exercise 4 - pool_forward</h3>
+<section id="exercise-4---pool_forward" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="exercise-4---pool_forward"><span class="header-section-number">3.1.1</span> Exercise 4 - pool_forward</h3>
 <p><strong>Reminder</strong>: Como aquí no hay padding, las fórmulas que relacionan la forma de salida del agrupamiento con la forma de entrada son las siguientes:</p>
 <p><span class="math display">\[\text{ancho de salida, } n_H = \Bigl\lfloor \frac{n_{H_{prev}} - f}{stride} \Bigr\rfloor +1\]</span></p>
 <p><span class="math display">\[\text{ancho de salida, }n_W = \Bigl\lfloor \frac{n_{W_{prev}} - f}{stride} \Bigr\rfloor +1\]</span></p>
@@ -868,17 +834,18 @@ A[1] =
 <p><a name="5"></a></p>
 </section>
 </section>
-<section id="backpropagation-en-las-convolutional-neural-networks" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="backpropagation-en-las-convolutional-neural-networks"><span class="header-section-number">2.5</span> 5 - Backpropagation en las Convolutional Neural Networks</h2>
+</section>
+<section id="backpropagation-en-las-convolutional-neural-networks" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Backpropagation en las Convolutional Neural Networks</h1>
 <p>En los frameworks de deep learning, solo se necesita implementar el forward pass, y el framework se encarga del backpropagation, por lo que la mayoría de los ingenieros de deep learning no necesitan preocuparse por susdetalles.</p>
 <p>Cuando se implementa una red neuronal simple (fully-connected), se utiliza la retropropagación para calcular las derivadas con respecto al loss para actualizar los parámetros. De manera similar, en las redes neuronales convolucionales se pueden calcular las derivadas con respecto al costo para actualizar los parámetros. Las ecuaciones de retropropagación se presentan brevemente a continuación.</p>
 <p><a name="5-1"></a></p>
-<section id="convolutional-layer-backward-pass" class="level3" data-number="2.5.1">
-<h3 data-number="2.5.1" class="anchored" data-anchor-id="convolutional-layer-backward-pass"><span class="header-section-number">2.5.1</span> 5.1 - Convolutional Layer Backward Pass</h3>
+<section id="convolutional-layer-backward-pass" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="convolutional-layer-backward-pass"><span class="header-section-number">4.1</span> Convolutional Layer Backward Pass</h2>
 <p>Comencemos implementando el paso hacia atrás para una capa CONV.</p>
 <p><a name="5-1-1"></a></p>
-<section id="cálculo-de-da" class="level4" data-number="2.5.1.1">
-<h4 data-number="2.5.1.1" class="anchored" data-anchor-id="cálculo-de-da"><span class="header-section-number">2.5.1.1</span> 5.1.1 - Cálculo de <span class="math inline">\(dA\)</span>:</h4>
+<section id="cálculo-de-da" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="cálculo-de-da"><span class="header-section-number">4.1.1</span> Cálculo de <span class="math inline">\(dA\)</span>:</h3>
 <p>This is the formula for computing <span class="math inline">\(dA\)</span> with respect to the cost for a certain filter <span class="math inline">\(W_c\)</span> and a given training example:</p>
 <p><span class="math display">\[dA \mathrel{+}= \sum _{h=0} ^{n_H} \sum_{w=0} ^{n_W} W_c \times dZ_{hw} \tag{1}\]</span></p>
 <p>Donde <span class="math inline">\(W_c\)</span> es un filtro y <span class="math inline">\(dZ_{hw}\)</span> un escalar correspondiente al gradiente del loss con respecto a la salida de la capa convolucional <span class="math inline">\(Z\)</span> en la fila <span class="math inline">\(h\)</span> y columna <span class="math inline">\(w\)</span> (correspondiente al dot-product tomado en el desplazamiento <span class="math inline">\(i\)</span> hacia la izquierda y el desplazamiento <span class="math inline">\(j\)</span> hacia abajo). Notese que en cada momento, se multiplica el mismo filtro <span class="math inline">\(W_c\)</span> por un <span class="math inline">\(dZ\)</span> diferente al actualizar <span class="math inline">\(dA\)</span>. Esto se debe pricipalmente a que cuanto se calcula el forward pass, cada filtro realiza el dot-product y es sumado por un <span class="math inline">\(a_{slice}\)</span> distinto. Por lo tanto, al calcular el backpropagation para <span class="math inline">\(dA\)</span>, simplemente se estan sumando los gradientes de todos los <span class="math inline">\(a_{slices}\)</span>.</p>
@@ -886,8 +853,8 @@ A[1] =
 <div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>da_prev_pad[vert_start:vert_end, horiz_start:horiz_end, :] <span class="op">+=</span> W[:,:,:,c] <span class="op">*</span> dZ[i, h, w, c]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><a name="5-1-2"></a></p>
 </section>
-<section id="cálculo-de-dw" class="level4" data-number="2.5.1.2">
-<h4 data-number="2.5.1.2" class="anchored" data-anchor-id="cálculo-de-dw"><span class="header-section-number">2.5.1.2</span> 5.1.2 - Cálculo de <span class="math inline">\(dW\)</span>:</h4>
+<section id="cálculo-de-dw" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="cálculo-de-dw"><span class="header-section-number">4.1.2</span> Cálculo de <span class="math inline">\(dW\)</span>:</h3>
 <p>Esta es la fórmula para calcular <span class="math inline">\(dW_c\)</span> (donde <span class="math inline">\(dW_c\)</span> es la derivada de un filtro) con respecto al loss:</p>
 <p><span class="math display">\[dW_c  \mathrel{+}= \sum _{h=0} ^{n_H} \sum_{w=0} ^ {n_W} a_{slice} \times dZ_{hw}  \tag{2}\]</span></p>
 <p>Donde <span class="math inline">\(a_{slice}\)</span> corresponde a la porción que se utilizó para generar la activación <span class="math inline">\(Z_{ij}\)</span>. Por lo tanto, esto nos da el gradiente para <span class="math inline">\(W\)</span>con respecto a esa porción. Dado que es el mismo <span class="math inline">\(W\)</span>, simplemente se sumarán todos esos grandientes para obtener <span class="math inline">\(dW\)</span>.</p>
@@ -895,17 +862,16 @@ A[1] =
 <div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dW[:,:,:,c] <span class="op">+=</span> a_slice <span class="op">*</span> dZ[i, h, w, c]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><a name="5-1-3"></a></p>
 </section>
-<section id="cálculo-de-db" class="level4" data-number="2.5.1.3">
-<h4 data-number="2.5.1.3" class="anchored" data-anchor-id="cálculo-de-db"><span class="header-section-number">2.5.1.3</span> 5.1.3 - Cálculo de <span class="math inline">\(db\)</span>:</h4>
+<section id="cálculo-de-db" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="cálculo-de-db"><span class="header-section-number">4.1.3</span> Cálculo de <span class="math inline">\(db\)</span>:</h3>
 <p>Esta es la fórmula para calcular <span class="math inline">\(db\)</span> con respecto al costo para un cierto filtro <span class="math inline">\(W_c\)</span>:</p>
 <p><span class="math display">\[db = \sum_h \sum_w dZ_{hw} \tag{3}\]</span> Al igual que en el caso de las redes básicas, <span class="math inline">\(db\)</span> se calcula sumando <span class="math inline">\(dZ\)</span>. En este caso, simplemente se están sumando todos los gradientes de la salida convolucional (<span class="math inline">\(Z\)</span>) con respecto al loss.</p>
 <p>En código, dentro de los bucles for apropiados, esta fórmula se traduce en:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>db[:,:,:,c] <span class="op">+=</span> dZ[i, h, w, c]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><a name="ex-5"></a></p>
 </section>
-</section>
-<section id="exercise-5---conv_backward" class="level3" data-number="2.5.2">
-<h3 data-number="2.5.2" class="anchored" data-anchor-id="exercise-5---conv_backward"><span class="header-section-number">2.5.2</span> Exercise 5 - conv_backward</h3>
+<section id="exercise-5---conv_backward" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="exercise-5---conv_backward"><span class="header-section-number">4.1.4</span> Exercise 5 - conv_backward</h3>
 <p>A continuación, se implementa la función <code>conv_backward</code>. You should sum over all the training examples, filters, heights, and widths. You should then compute the derivatives using formulas 1, 2 and 3 above.</p>
 <div class="cell" data-execution_count="18">
 <details>
@@ -1014,12 +980,12 @@ db_mean = 7.839232564616838</code></pre>
 <p><a name="5-2"></a></p>
 </section>
 </section>
-<section id="pooling-layer---backward-pass" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="pooling-layer---backward-pass"><span class="header-section-number">2.6</span> 5.2 Pooling Layer - Backward Pass</h2>
+<section id="pooling-layer---backward-pass" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="pooling-layer---backward-pass"><span class="header-section-number">4.2</span> Pooling Layer - Backward Pass</h2>
 <p>A continuación, se implementará el backward pass para la pooling layer, empezando por la capa MAX-POOL. Aunque una capa pooling no tiene parámetros que actualizar en la fase de retropropagación, aún es necesario retropropagar el gradiente a través de la la pooling layer para calcular los gradientes de las capas que precedieron a la capa de pooling.</p>
 <p><a name="5-2-1"></a></p>
-<section id="max-pooling---backward-pass" class="level3" data-number="2.6.1">
-<h3 data-number="2.6.1" class="anchored" data-anchor-id="max-pooling---backward-pass"><span class="header-section-number">2.6.1</span> 5.2.1 Max Pooling - Backward Pass</h3>
+<section id="max-pooling---backward-pass" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="max-pooling---backward-pass"><span class="header-section-number">4.2.1</span> Max Pooling - Backward Pass</h3>
 <p>Antes de saltar directamente al backpropagation de la capa de pooling, se va a contruir la función de ayuda <code>create_mask_from_window()</code>, que hace lo siguiente:</p>
 <p><span class="math display">\[ X = \begin{bmatrix}
 1 &amp;&amp; 3 \\
@@ -1029,7 +995,10 @@ db_mean = 7.839232564616838</code></pre>
 1 &amp;&amp; 0
 \end{bmatrix}\tag{4}\]</span></p>
 <p>La función <code>create_mask_from_window()</code> genera una matriz “máscara” que identifica la ubicación del valor máximo dentro de una matriz. Un True (1) en la máscara indica la posición del máximo en la matriz X, mientras que todas las demás entradas son False (0). El average pooling durante la retropropagación opera de manera similar, aunque con una máscara distinta.</p>
-<p><a name="ex-6"></a> ### Exercise 6 - create_mask_from_window</p>
+<p><a name="ex-6"></a></p>
+</section>
+<section id="exercise-6---create_mask_from_window" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="exercise-6---create_mask_from_window"><span class="header-section-number">4.2.2</span> Exercise 6 - create_mask_from_window</h3>
 <p>Se implementa la función <code>create_mask_from_window()</code>. Esta función será de ayuda durante el pooling de la retropropagación.</p>
 <div class="cell" data-execution_count="20">
 <details>
@@ -1082,8 +1051,8 @@ mask =
 <p>Se realiza el seguimiento de la posición del valor máximo porque es este valor de entrada el que finalmente influye en el resultado y, por tanto, en el costo. El proceso de retropropagación calcula los gradientes con respecto al costo, por lo que <strong>cualquier elemento que influya en el costo final debe tener un gradiente no nulo</strong>. Por tanto, la retropropagación “propagará” el gradiente de vuelta al valor de entrada específico que influyó en el costo.</p>
 <p><a name="5-2-2"></a></p>
 </section>
-<section id="average-pooling---backward-pass" class="level3" data-number="2.6.2">
-<h3 data-number="2.6.2" class="anchored" data-anchor-id="average-pooling---backward-pass"><span class="header-section-number">2.6.2</span> 5.2.2 - Average Pooling - Backward Pass</h3>
+<section id="average-pooling---backward-pass" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="average-pooling---backward-pass"><span class="header-section-number">4.2.3</span> Average Pooling - Backward Pass</h3>
 <p>En el max pooling, para cada ventana de entrada, toda la “influencia” en el resultado proviene de un único valor de entrada: el máximo. En el average pooling, cada elemento de la ventana de entrada tiene la misma influencia en el resultado. Por lo tanto, para implementar la retropropagación, ahora se implementará una función auxiliar que refleje esto.</p>
 <p>Por ejemplo, si se realizó un average pooling en el forward pass utilizando un filtro de 2x2, entonces la máscara que se utilizará para la retropropagación será así: <span class="math display">\[ dZ = 1 \quad \rightarrow  \quad dZ =\begin{bmatrix}
 1/4 &amp;&amp; 1/4 \\
@@ -1092,8 +1061,8 @@ mask =
 <p>Esto implica que cada posición en la matriz <span class="math inline">\(dZ\)</span> contribuye de manera igual al resultado porque, en el forward pass, se toma un promedio.</p>
 <p><a name="ex-7"></a></p>
 </section>
-<section id="exercise-7---distribute_value" class="level3" data-number="2.6.3">
-<h3 data-number="2.6.3" class="anchored" data-anchor-id="exercise-7---distribute_value"><span class="header-section-number">2.6.3</span> Exercise 7 - distribute_value</h3>
+<section id="exercise-7---distribute_value" class="level3" data-number="4.2.4">
+<h3 data-number="4.2.4" class="anchored" data-anchor-id="exercise-7---distribute_value"><span class="header-section-number">4.2.4</span> Exercise 7 - distribute_value</h3>
 <p>A continuación se implementa la función <code>distribute_value</code> para distribuir equitativamente un valor dz a través de una matriz de dimensión shape.</p>
 <div class="cell" data-execution_count="24">
 <details>
@@ -1135,13 +1104,13 @@ mask =
 </div>
 <p><a name="5-2-3"></a></p>
 </section>
-<section id="putting-it-together-pooling-backward" class="level3" data-number="2.6.4">
-<h3 data-number="2.6.4" class="anchored" data-anchor-id="putting-it-together-pooling-backward"><span class="header-section-number">2.6.4</span> 5.2.3 Putting it Together: Pooling Backward</h3>
+<section id="putting-it-together-pooling-backward" class="level3" data-number="4.2.5">
+<h3 data-number="4.2.5" class="anchored" data-anchor-id="putting-it-together-pooling-backward"><span class="header-section-number">4.2.5</span> Putting it Together: Pooling Backward</h3>
 <p>Ahora se dispoonen de todos los elementos para calcular el back propagation en una pooling layer.</p>
 <p><a name="ex-8"></a></p>
 </section>
-<section id="exercise-8---pool_backward" class="level3" data-number="2.6.5">
-<h3 data-number="2.6.5" class="anchored" data-anchor-id="exercise-8---pool_backward"><span class="header-section-number">2.6.5</span> Exercise 8 - pool_backward</h3>
+<section id="exercise-8---pool_backward" class="level3" data-number="4.2.6">
+<h3 data-number="4.2.6" class="anchored" data-anchor-id="exercise-8---pool_backward"><span class="header-section-number">4.2.6</span> Exercise 8 - pool_backward</h3>
 <p>Se implementa la función <code>pool_backward</code> en ambos modos (<code>"max"</code> and <code>"average"</code>). Nuevamente, se utilizan 4 bucles for (iterando sobre los ejemplos de entrenamiento, altura, anchura y canales). Se emprea un <code>if/elif</code> para verificar si el modo es igual a <code>'max'</code> o <code>'average'</code>. Si es igual a ‘average’ se usa la función <code>distribute_value()</code> implementada anteriormente para crear una matriz de la misma dimensión que <code>a_slice</code>. De lo contrario, si el mdoo es igual a ‘<code>max</code>’, se crea una máscara con <code>create_mask_from_window()</code> y se multiplica por el valor correspondiente de <span class="math inline">\(dA\)</span>.</p>
 <div class="cell">
 <details>
